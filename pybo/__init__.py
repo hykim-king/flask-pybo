@@ -1,25 +1,34 @@
+# Created by user at 2024-02-14
 from flask import Flask
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 
 import config
 
-db = SQLAlchemy()
-migrate = Migrate()
+db=SQLAlchemy()
+migrate=Migrate()
 
+
+#애플리케이션 팩토리
 def create_app():
-    '''create_app은 플라스크 내부에서 정의된 함수명이다.
-    create_app 대신 다른 이름을 사용하면 정상으로 동작하지 않는다.'''
     app = Flask(__name__)
-
     app.config.from_object(config)
-    # ORM
+
+    #ORM
     db.init_app(app)
-    migrate.init_app(app, db)
+    migrate.init_app(app,db)
     from . import models
 
-    # 블루프린트
+    print(f"__name__:{__name__}")
+
+    #Blueprint등록
     from .views import main_views
     app.register_blueprint(main_views.bp)
 
+    
     return app
+    
+    
+
+
+
