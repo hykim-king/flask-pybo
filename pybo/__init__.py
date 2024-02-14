@@ -19,7 +19,7 @@ def create_app():
     migrate.init_app(app,db)
     from . import models
 
-    print(f"__name__:{__name__}")
+    #print(f"__name__:{__name__}")
 
     #Blueprint등록
     from .views import main_views

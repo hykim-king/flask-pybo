@@ -1,5 +1,5 @@
 # Created by user at 2024-02-14
-
+#가나다
 from flask import Blueprint
 
 #__name__: main_views.py
