@@ -8,9 +8,17 @@
     <!--기본css -->
     <link rel="stylesheet" href="{{url_for('static',filename='style.css')}}">
     <link rel="shortcut icon" type="image/x-icon" href="{{url_for('static',filename='favicon.ico')}}" >
+    <!--bootstrap 자바스크립트: 반응형 메뉴처리(햄버거)-->
+    <script src="{{url_for('static',filename='bootstrap.min.js')}}"></script>
     <title>PCWK</title>
 </head>
 <body>
+
+<!-- 네비게이션바 -->
+{% include "navbar.html" %}
+<!--//네비게이션 -->
+
+
     <!-- 기본 템플릿에 삽입될 내용 -->
     {% block content %}
     {% endblock%}
