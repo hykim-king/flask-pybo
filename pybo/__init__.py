@@ -22,11 +22,17 @@ def create_app():
     #print(f"__name__:{__name__}")
 
     #Blueprint등록
-    from .views import main_views,question_views,answer_views
+    from .views import main_views,question_views,answer_views,auth_views
 
     app.register_blueprint(main_views.bp)#main
     app.register_blueprint(question_views.bp)#Question
     app.register_blueprint(answer_views.bp)#Answer
+    app.register_blueprint(auth_views.bp)
+
+    #필터:datetime으로 등록
+    from .filter import formatDateTime
+    app.jinja_env.filters['datetime'] = formatDateTime
+
     return app
     
     

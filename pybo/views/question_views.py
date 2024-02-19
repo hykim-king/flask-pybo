@@ -50,17 +50,7 @@ def _list():
 
     #paging: http://127.0.0.1:5000/question/list?page=1
     page = request.args.get('page', type=int, default=1)
-    print(f'page:{page}')
-
     question_list=question_list.paginate(page=page, per_page=10)
-
-
-    '''
-    question_list:SELECT question.id AS question_id, question.subject AS question_subject, question.contents AS question_contents, question.create_date AS question_create_date
-    FROM question ORDER BY question.create_date DESC    
-    '''
-
-    print(f'question_list:{question_list}')
 
     #화면으로, question_list 데이터 전달
     return render_template('question/question_list.html',question_list=question_list)

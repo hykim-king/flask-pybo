@@ -8,7 +8,7 @@
                 <!--white-space:pre-line: 글 내용의 줄 바꿈을 정상적-->
                 <div class="card-text" style="white-space:pre-line">{{question.contents}}</div>
                 <div class="d-flex justify-content-end">
-                    <div class="badge rounded-pill bg-light text-dark p-2">{{question.create_date}}</div>
+                    <div class="badge rounded-pill bg-light text-dark p-2">{{question.create_date|datetime}}</div>
                 </div>
             </div>
 
@@ -24,7 +24,7 @@
                        <div class="card-body">
                            <div class="card-text" style="white-space:pre-line">{{answer.contents}}</div>
                            <div class="d-flex justify-content-end">
-                               <div class="badge rounded-pill bg-light text-dark p-2">{{answer.create_date}}</div>
+                               <div class="badge rounded-pill bg-light text-dark p-2">{{answer.create_date|datetime}}</div>
                            </div>
                        </div>
                    </div>

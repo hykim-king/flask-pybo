@@ -3,6 +3,12 @@
 
 from pybo import db
 
+class User(db.Model):
+    id = db.Column(db.Integer,primary_key=True) #숫자
+    username = db.Column(db.String(150),nullable=False) #문자, not null
+    password = db.Column(db.String(200),nullable=False) #문자, not null
+    email    = db.Column(db.String(320),nullable=False,unique=True) #문자, not null
+
 class Question(db.Model):
     id = db.Column(db.Integer,primary_key=True) #숫자
     subject = db.Column(db.String(200),nullable=False) #문자
@@ -11,10 +17,7 @@ class Question(db.Model):
 
 class Answer(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    #fk생성:
-    # ondelete='CASCADE' ->sql수행시 적용
-    #question = db.relationship('Question',backref=db.backref('answer_set', cascade='all, delete-orphan'))
     question_id = db.Column(db.Integer,db.ForeignKey('question.id',ondelete='CASCADE'))
-    question = db.relationship('Question',backref=db.backref('answer_set'))
+    question = db.relationship('Question', backref=db.backref('answer_set'))
     contents = db.Column(db.Text(), nullable=False)
     create_date = db.Column(db.DateTime(), nullable=False)
