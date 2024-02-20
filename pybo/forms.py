@@ -6,6 +6,11 @@ from wtforms.validators import DataRequired,EqualTo,Email,Length
 
 #FlaskForm을 상속
 
+#로그인 : email, password
+class UserLoginForm(FlaskForm):
+    email = EmailField('이메일',validators=[DataRequired(),Email()])
+    password = PasswordField('비밀번호',validators=[DataRequired()])
+
 class UserCreateForm(FlaskForm):
     #Length:이름 최소 3글자, 최대 25글자
     username = StringField('사용자 이름',validators=[DataRequired('이름은 입력 필수 입니다.'), Length(min=3,max=25)])

@@ -1,18 +1,21 @@
 # Created by user at 2024-02-15
 from datetime import datetime
 
-from flask import Blueprint, render_template,request,url_for
+from flask import Blueprint, render_template,request,url_for,g
 from werkzeug.utils import redirect
 
 from pybo.models import Question
 from pybo.forms import QuestionForm,AnswerForm
+from .answer_views import login_required
 from .. import db
 
 bp = Blueprint('question',__name__,url_prefix='/question')
 
 
 
+#@login_required @bp.route뒤에 위치해야 한다. 그렇치 않으면 정상 동작 하지 않는다.
 @bp.route('/create',methods=('GET','POST'))
+@login_required
 def create():
     form = QuestionForm()
 
@@ -20,7 +23,8 @@ def create():
     print(f'form.validate_on_submit:{form.validate_on_submit()}')
     #request method가 post이고 form이 submit()이면
     if request.method == 'POST' and form.validate_on_submit():
-        question = Question(subject=form.subject.data,contents=form.contents.data,create_date=datetime.now())
+        question = Question(subject=form.subject.data,contents=form.contents.data
+                            ,create_date=datetime.now(),user=g.user)
         db.session.add(question)
         db.session.commit()
 
