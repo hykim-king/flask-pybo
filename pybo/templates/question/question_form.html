@@ -21,6 +21,7 @@
         <div class="mb-3">
             <label for="contents">내용</label>
             <textarea class="form-control" name="contents" id="contents" rows="7">{{form.contents.data or ''}}</textarea>
+            {{ simplemde.load }}
         </div>
         <button type="submit" class="btn btn-primary">저장</button>
     </form>

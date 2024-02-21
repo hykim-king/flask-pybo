@@ -4,6 +4,7 @@ from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
 from flaskext.markdown import Markdown
+from flask_simplemde import SimpleMDE
 
 import config
 
@@ -25,6 +26,9 @@ migrate=Migrate()
 def create_app():
     app = Flask(__name__)
     app.config.from_object(config)
+
+    app.config["SIMPLEMDE_JS_IIFE"] = True
+    app.config["SIMPLEMDE_USE_CDN"] = True
 
     #ORM
     db.init_app(app)
@@ -55,7 +59,7 @@ def create_app():
 
     #markdown : nl2br은 줄바꿈 문자를 <br/> 바꿔 준다.
     Markdown(app, extensions=["nl2br", "fenced_code"])
-
+    SimpleMDE(app)
 
     return app
     
