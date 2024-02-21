@@ -1,7 +1,7 @@
 # Created by user at 2024-02-15
 import functools
 from datetime import datetime
-from flask import Blueprint, url_for, request,render_template,g
+from flask import Blueprint, url_for, request, render_template, g, flash
 from werkzeug.utils import redirect
 
 from pybo import db
@@ -9,6 +9,10 @@ from pybo.models import Question,Answer
 from ..forms import AnswerForm
 
 bp = Blueprint('answer',__name__,url_prefix='/answer')
+
+
+
+
 
 #로그인 필수 처리 데코레이터 : @login_required
 def login_required(view):
@@ -23,6 +27,53 @@ def login_required(view):
         return view(*args, **kwargs)
 
     return wrapped_view
+
+#삭제: delete
+@bp.route('/delete/<int:answer_id>')
+@login_required
+def delete(answer_id):
+    answer = Answer.query.get_or_404(answer_id)
+
+    question_id=answer.question.id
+
+    if g.user != answer.user:
+        flash('삭제 권한이 없습니다.')
+    else:
+        db.session.delete(answer)
+        db.session.commit()
+
+    return redirect( url_for('question.detail',question_id=question_id))
+
+
+#수정: modify
+@bp.route('/modify/<int:answer_id>',methods=('GET','POST'))
+@login_required
+def modify(answer_id):
+    answer = Answer.query.get_or_404(answer_id)
+
+    #본인의 답변글만 수정
+    if g.user != answer.user:
+        flash('수정 권한이 없습니다.')
+        return redirect( url_for('question.detail',question_id=answer.question.id))
+    if request.method == 'POST': #POST 처리
+        form = AnswerForm()
+
+        if form.validate_on_submit():
+            form.populate_obj(answer) #form데이터를 수정
+            answer.modify_date = datetime.now() #수정일
+            db.session.commit()
+            #질문 상셍
+            return redirect( url_for('question.detail',question_id=answer.question.id))
+
+    else: #GET 방식
+        form = AnswerForm(obj=answer)
+
+    return render_template('answer/answer_form.html', form=form)
+
+
+
+
+
 
 
 @bp.route('/create/<int:question_id>',methods=('POST',))

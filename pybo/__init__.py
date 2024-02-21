@@ -3,7 +3,7 @@ from flask import Flask
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import MetaData
-
+from flaskext.markdown import Markdown
 
 import config
 
@@ -52,6 +52,10 @@ def create_app():
     #필터:datetime으로 등록
     from .filter import formatDateTime
     app.jinja_env.filters['datetime'] = formatDateTime
+
+    #markdown : nl2br은 줄바꿈 문자를 <br/> 바꿔 준다.
+    Markdown(app, extensions=["nl2br", "fenced_code"])
+
 
     return app
     
