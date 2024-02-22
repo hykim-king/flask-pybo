@@ -12,6 +12,21 @@ from .. import db
 bp = Blueprint('question',__name__,url_prefix='/question')
 
 
+
+#질문 추천 라우팅 함수
+@bp.route('/vote/<int:question_id>')
+@login_required
+def vote(question_id):
+    _question = Question.query.get_or_404(question_id)
+    #본인이 작성한 글은 추천 불가
+    if g.user == _question.user:
+        flash('본인이 작성한 글은 추천 불가 합니다.')
+    else:
+        _question.voter.append(g.user)
+        db.session.commit()
+    return redirect(url_for('question.detail',question_id=question_id))
+
+
 #삭제: delete
 @bp.route('/delete/<int:question_id>')
 @login_required

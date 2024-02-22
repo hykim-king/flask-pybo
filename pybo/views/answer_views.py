@@ -14,6 +14,8 @@ bp = Blueprint('answer',__name__,url_prefix='/answer')
 
 
 
+
+
 #로그인 필수 처리 데코레이터 : @login_required
 def login_required(view):
     @functools.wraps(view)
@@ -27,6 +29,21 @@ def login_required(view):
         return view(*args, **kwargs)
 
     return wrapped_view
+
+#답변 추천
+@bp.route('/vote/<int:answer_id>')
+@login_required
+def vote(answer_id):
+    _answer = Answer.query.get_or_404(answer_id)
+
+    if g.user == _answer.user:
+        flash('본인이 작성한 글은 추천할수 없습니다.')
+    else:
+        _answer.voter.append(g.user)
+        db.session.commit()
+
+    return redirect(url_for('question.detail',question_id=_answer.question.id))
+
 
 #삭제: delete
 @bp.route('/delete/<int:answer_id>')

@@ -28,6 +28,11 @@
                 </div>
                 <!-- 수정은 글을 등록한 사람만 수정 가능-->
                 <div class="my-3">
+                    <a href="javascript:void(0)" data-uri="{{ url_for('question.vote',question_id=question.id)}}"
+                       class="recommend btn btn-sm btn-outline-secondary">추천
+                        <span class="badge rounded-pill bg-success">{{question.voter|length}}</span>
+                    </a>
+
                     {% if g.user == question.user %}
                      <a href="{{ url_for('question.modify',question_id=question.id) }}"  class="btn btn-sm btn-outline-secondary">수정</a>
                      <a href="javascript:void(0)" class="delete btn btn-sm btn-outline-secondary"
@@ -65,6 +70,10 @@
 
                            <!--답변 수정-->
                            <div class="my-3">
+                               <a href="javascript:void(0)" data-uri="{{ url_for('answer.vote',answer_id=answer.id)  }}"
+                                  class="recommend btn btn-sm btn-outline-secondary">추천
+                               <span class="badge rounded-pill bg-success">{{answer.voter|length}}</span>
+                               </a>
                                {% if g.user == answer.user %}
                                <a href="{{ url_for('answer.modify',answer_id=answer.id) }}" class="btn btn-sm btn-outline-secondary" >수정</a>
                                <a href="#" class="delete btn btn-sm btn-outline-secondary"
@@ -100,7 +109,8 @@
 
             <!--오류표시 --------------------------------------------------->
             <div class="mb-3">
-                <textarea {% if not g.user %}  disabled {% endif %} name="contents" id="contents" rows="7" class="form-control"></textarea>
+                <textarea {% if not g.user %}  disabled {% endif %} name="contents" id="contents" rows="3" class="form-control"></textarea>
+                {{ simplemde.load }}
             </div>
             <input type="submit" value="답변등록" class="btn btn-primary">
         </form>
@@ -110,7 +120,18 @@
 
 {% block script %}
     <script>
-        const deleteEmements =document.getElementsByClassName('delete');
+        //recommend
+        const recommendElements = document.getElementsByClassName('recommend');
+        Array.from(recommendElements).forEach(function(element){
+            element.addEventListener('click', function(){
+                 console.log('recommendElements click:'+this.dataset.uri);
+                  if(confirm('추천 하시겠습니까?')){
+                       location.href = this.dataset.uri;
+                  }
+            });
+        });
+
+        const deleteEmements = document.getElementsByClassName('delete');
         //Array.from(deleteEmements) : deleteEmements를 배열 요소로 변환
         Array.from(deleteEmements).forEach(function(element){
             element.addEventListener('click', function(){
